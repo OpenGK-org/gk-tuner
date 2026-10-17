@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='utf-8'?>
+<XDFFORMAT version="1.80">
+  <XDFHEADER>
+    <deftitle>GK Tuner • Synthetic demonstration</deftitle>
+    <BASEOFFSET offset="0" subtract="0" />
+    <CATEGORY index="0" name="Ignition" />
+    <CATEGORY index="1" name="Fuel" />
+    <CATEGORY index="2" name="Engine speed" />
+  </XDFHEADER>
+  <XDFTABLE uniqueid="0x1">
+    <title>Base ignition advance • DEMO</title>
+    <description>Synthetic demonstration. Not for flashing to an ECU.</description>
+    <CATEGORYMEM category="1" />
+    <XDFAXIS id="x">
+      <LABEL index="0" value="800" />
+      <LABEL index="1" value="1200" />
+      <LABEL index="2" value="1600" />
+      <LABEL index="3" value="2000" />
+      <LABEL index="4" value="2500" />
+      <LABEL index="5" value="3000" />
+      <LABEL index="6" value="3500" />
+      <LABEL index="7" value="4000" />
+      <LABEL index="8" value="4500" />
+      <LABEL index="9" value="5000" />
+      <LABEL index="10" value="6000" />
+      <LABEL index="11" value="7000" />
+    </XDFAXIS>
+    <XDFAXIS id="y">
+      <LABEL index="0" value="20" />
+      <LABEL index="1" value="30" />
+      <LABEL index="2" value="40" />
+      <LABEL index="3" value="50" />
+      <LABEL index="4" value="65" />
+      <LABEL index="5" value="80" />
+      <LABEL index="6" value="95" />
+      <LABEL index="7" value="110" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedaddress="0x0" mmedelementsizebits="16" mmedtypeflags="0x02" mmedrowcount="8" mmedcolcount="12" />
+      <units>° BTDC</units>
+      <decimalpl>2</decimalpl>
+      <min>-32</min>
+      <max>80</max>
+      <MATH equation="X*0.25-32">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+  <XDFTABLE uniqueid="0x2">
+    <title>Target lambda • DEMO</title>
+    <description>Synthetic demonstration. Not for flashing to an ECU.</description>
+    <CATEGORYMEM category="2" />
+    <XDFAXIS id="x">
+      <LABEL index="0" value="800" />
+      <LABEL index="1" value="1200" />
+      <LABEL index="2" value="1600" />
+      <LABEL index="3" value="2000" />
+      <LABEL index="4" value="2500" />
+      <LABEL index="5" value="3000" />
+      <LABEL index="6" value="3500" />
+      <LABEL index="7" value="4000" />
+      <LABEL index="8" value="4500" />
+      <LABEL index="9" value="5000" />
+      <LABEL index="10" value="6000" />
+      <LABEL index="11" value="7000" />
+    </XDFAXIS>
+    <XDFAXIS id="y">
+      <LABEL index="0" value="20" />
+      <LABEL index="1" value="30" />
+      <LABEL index="2" value="40" />
+      <LABEL index="3" value="50" />
+      <LABEL index="4" value="65" />
+      <LABEL index="5" value="80" />
+      <LABEL index="6" value="95" />
+      <LABEL index="7" value="110" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedaddress="0xc0" mmedelementsizebits="16" mmedtypeflags="0x02" mmedrowcount="8" mmedcolcount="12" />
+      <units>λ</units>
+      <decimalpl>2</decimalpl>
+      <min>0</min>
+      <max>2</max>
+      <MATH equation="X/10000">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+  <XDFTABLE uniqueid="0x3">
+    <title>Engine speed limit • DEMO</title>
+    <description>Synthetic demonstration. Not for flashing to an ECU.</description>
+    <CATEGORYMEM category="3" />
+    <XDFAXIS id="x">
+      <LABEL index="0" value="800" />
+    </XDFAXIS>
+    <XDFAXIS id="y">
+      <LABEL index="0" value="20" />
+    </XDFAXIS>
+    <XDFAXIS id="z">
+      <EMBEDDEDDATA mmedaddress="0x180" mmedelementsizebits="16" mmedtypeflags="0x02" mmedrowcount="1" mmedcolcount="1" />
+      <units>rpm</units>
+      <decimalpl>2</decimalpl>
+      <min>0</min>
+      <max>10000</max>
+      <MATH equation="X">
+        <VAR id="X" />
+      </MATH>
+    </XDFAXIS>
+  </XDFTABLE>
+</XDFFORMAT>

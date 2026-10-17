@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CCP Logger</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Logging controls">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">▦</div>
+        <div><strong>CCP Logger</strong><small>CA663056 / SIMK43</small></div>
+      </div>
+
+
+      <section class="capture-controls" aria-label="Capture and connection">
+        <div class="session-mode" role="group" aria-label="Session mode">
+          <button id="mode-record" class="active" type="button" aria-pressed="true">CSV log</button>
+          <button id="mode-monitor" type="button" aria-pressed="false">Live monitor</button>
+        </div>
+        <button class="capture-button" id="capture-button"><span class="record-dot"></span> Start CSV log</button>
+        <button class="settings-toggle" id="settings-toggle" aria-expanded="true" aria-controls="settings"><span>Connection settings</span><span id="settings-chevron">⌃</span></button>
+        <div class="settings open" id="settings">
+          <label>GS-USB channel <input id="channel" value="0" aria-label="GS-USB channel"></label>
+          <label>CAN bitrate <input id="bitrate" type="number" value="500000" aria-label="CAN bitrate"></label>
+          <label>DAQ speed <select id="rate" aria-label="DAQ speed"><option value="1">100 Hz</option><option value="2">50 Hz</option><option value="4">25 Hz</option><option value="5">20 Hz</option><option value="10">10 Hz</option><option value="20">5 Hz</option><option value="100">1 Hz</option></select></label>
+        </div>
+      </section>
+
+      <div class="source-panel">
+        <div class="section-label">Data source</div>
+        <div class="source-actions">
+          <button class="source active" id="sample-button"><span>Sample log</span><b id="sample-check">✓</b></button>
+          <button class="source" id="import-button">Open CSV…</button>
+        </div>
+        <input id="file-input" type="file" accept=".csv,text/csv" hidden>
+      </div>
+
+      <div class="signal-panel">
+        <div class="signal-panel-head"><div class="section-label">Signals</div><span id="selected-count">0 selected</span></div>
+        <div class="search-wrap"><span aria-hidden="true">⌕</span><input id="signal-search" placeholder="Filter signals" autocomplete="off" aria-label="Filter signals"></div>
+        <div class="signal-toolbar"><button id="select-defaults">Recommended</button><button id="clear-signals">Clear</button></div>
+        <div id="signal-list" class="signal-list"></div>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="capacity-head"><span>DAQ capacity</span><strong id="capacity-label">0 / 12 ODTs</strong></div>
+        <div class="capacity-track"><div id="capacity-bar"></div></div>
+        <div class="capacity-hint" id="capacity-hint">Select the signals to capture.</div>
+
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="view-name">Log viewer</div>
+        <div class="top-right"><span class="status-pill" id="status-pill"><i></i> SAMPLE DATA</span><button class="button-secondary" id="download-button" title="Download current data as CSV">Export CSV</button></div>
+      </header>
+
+      <div class="content">
+        <div id="notice" class="notice" hidden></div>
+        <section class="metrics" aria-label="Capture summary">
+          <div class="metric"><span class="metric-label" id="metric-span-label">Duration</span><strong id="metric-duration">00:00.0</strong><small id="metric-session-detail">Loaded capture</small></div>
+          <div class="metric"><span class="metric-label">Samples</span><strong id="metric-samples">0</strong><small id="metric-samples-detail">Recorded points</small></div>
+          <div class="metric"><span class="metric-label">Rate</span><strong id="metric-rate">—</strong><small>Complete cycles / second</small></div>
+          <div class="metric"><span class="metric-label">Channels</span><strong id="metric-signals">0</strong><small id="metric-signals-detail">In this log</small></div>
+        </section>
+
+        <section class="live-panel" id="live-panel" aria-label="Current signal values" hidden>
+          <div class="live-panel-head"><h2>Live values</h2><span>Latest complete DAQ cycle</span></div>
+          <div class="live-values" id="live-values"></div>
+        </section>
+
+        <section class="chart-section" aria-label="Signal plots">
+          <div class="section-heading">
+            <div class="section-title"><h1>Traces</h1><span id="graph-count">0 / 8</span></div>
+            <div class="view-tools">
+              <button id="zoom-out" title="Zoom out" aria-label="Zoom out">−</button>
+              <button id="zoom-in" title="Zoom in" aria-label="Zoom in">＋</button>
+              <button id="fit-view" class="fit-button">Fit time</button>
+              <button id="follow-live" class="follow-live" hidden>Following live</button>
+              <button class="button-primary" id="add-graph">Add trace</button>
+            </div>
+          </div>
+          <div class="timeline-toolbar">
+            <div class="timeline-left"><strong id="dataset-name">Loading capture…</strong><span id="timeline-range">—</span></div>
+            <div class="timeline-right"><span>Cursor</span><strong id="cursor-time">—</strong></div>
+          </div>
+          <div class="time-scrollbar" id="time-scrollbar" hidden>
+            <span id="time-scroll-start">0s</span>
+            <input id="time-scroll" type="range" min="0" max="10000" value="0" aria-label="Scroll through capture" title="Drag to jump through the capture">
+            <span id="time-scroll-end">0s</span>
+          </div>
+          <div class="charts" id="charts"></div>
+          <button class="add-chart-bottom" id="add-graph-bottom">＋ Add trace</button>
+          <p class="plot-help">Drag the time bar to jump through long logs - Scroll to zoom - Hover to inspect - Drag a plot edge to resize</p>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="plot-modal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-head"><div><h2 id="modal-title">Trace settings</h2><p>Choose signals, line colours, and optional Y-axis limits.</p></div><button id="modal-close" class="close-button" aria-label="Close">×</button></div>
+      <div class="modal-search"><span aria-hidden="true">⌕</span><input id="plot-search" placeholder="Filter available signals" aria-label="Filter available signals"></div>
+      <div class="modal-body">
+      <div class="modal-list" id="modal-list"></div>
+      <div class="axis-section"><div class="axis-section-title">Y-axis range <span>Blank = automatic</span></div><div id="axis-settings"></div><div id="axis-error" class="axis-error" hidden></div></div>
+      </div>
+      <div class="modal-footer"><span id="modal-selection">0 / 10 selected</span><button id="modal-save" class="button-primary">Apply</button></div>
+    </div>
+  </div>
+  <script src="qrc:///qtwebchannel/qwebchannel.js"></script><script src="app.js"></script>
+</body>
+</html>

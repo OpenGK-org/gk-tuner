@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gk-tuner"
+version = "0.13.0"
+description = "Native calibration, logging and GKFlasher workspace"
+requires-python = ">=3.11"
+dependencies = ["PyQt5>=5.15.10,<5.16", "PyQtWebEngine>=5.15.7,<5.16", "pyserial>=3.5,<4"]
+
+[project.gui-scripts]
+gk-tuner = "gktuner.app:main"
+
+[tool.setuptools.packages.find]
+include = ["gktuner*"]
+
+[tool.setuptools.package-data]
+gktuner = ["assets/*", "logger_web/*"]

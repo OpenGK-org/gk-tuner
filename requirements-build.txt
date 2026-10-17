@@ -1,0 +1,2 @@
+# Build tools are separate from the application's runtime environment.
+pyinstaller==6.16.0
